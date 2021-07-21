@@ -5,19 +5,19 @@ namespace xadrez
 {
     class Frame
     {
-        public static void printFrame(Table table)
+        public static void printFrame(Table tab)
         {
-            for (int i=0; i < table.rows; i++)
+            for (int i=0; i < tab.rows; i++)
             {
-                for (int j=0; j < table.columns; j++)
+                for (int j=0; j < tab.columns; j++)
                 {
-                    if (table.piece(i, j) == null)
+                    if (tab.piece(i, j) == null)
                     {
                         Console.Write("- ");
                     }
                     else
                     {
-                        Console.Write(table.piece(i, j) + " ");
+                        Console.Write(tab.piece(i, j) + " ");
                     }
                 }
                 Console.WriteLine();
