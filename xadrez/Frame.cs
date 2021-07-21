@@ -1,13 +1,13 @@
 ﻿using System;
 using table;
+using chess;
 
 namespace xadrez
 {
     class Frame
     {
-        public static void printFrame(Table tab)
+        public static void printTable(Table tab)
         {
-
             for (int i=0; i < tab.rows; i++)
             {
                 Console.Write(8 - i + " ");
@@ -27,6 +27,13 @@ namespace xadrez
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static ChessPosition readCurrentPosition() {
+            string pos = Console.ReadLine();
+            char col = pos[0];
+            int row = int.Parse(pos[1] + "");
+            return new ChessPosition(col, row);
         }
 
         public static void printPiece(Piece p) {

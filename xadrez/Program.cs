@@ -9,17 +9,23 @@ namespace xadrez
 		static void Main(string[] args)
 		{
 			try {
-				Table table = new Table(8, 8);
-				table.placePiece(new Tower(table, Color.Yellow), new Position(0, 0));
-				table.placePiece(new Tower(table, Color.Yellow), new Position(0, 7));
-				table.placePiece(new King(table, Color.Yellow), new Position(0, 3));
+				ChessGame game = new ChessGame();
 
-				table.placePiece(new Tower(table, Color.Red), new Position(7, 0));
-				table.placePiece(new Tower(table, Color.Red), new Position(7, 7));
-				table.placePiece(new King(table, Color.Red), new Position(7, 4));
+				while (!game.isEnded) {
+					Console.Clear();
+					Frame.printTable(game.table);
 
+					Console.WriteLine("");
+					Console.Write("Escolha uma peça para movimentar: ");
+					Position currentPosition = Frame.readCurrentPosition().toPosition();
 
-				Frame.printFrame(table);
+					Console.Write("Escolha para onde quer movimentar: ");
+					Position nextPosition = Frame.readCurrentPosition().toPosition();
+
+					game.doMove(currentPosition, nextPosition);
+				}
+
+				
 			}
 			catch (TableException e) {
 				Console.WriteLine(e.Message);
