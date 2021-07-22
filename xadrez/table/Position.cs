@@ -11,6 +11,12 @@
             this.column = column;
         }
 
+        public void setValues(int row, int col) 
+        {
+            this.row = row;
+            this.column = col;            
+        }
+
         public override string ToString()
         {
             return $"Posição: {row},{column} ";

@@ -11,13 +11,19 @@ namespace xadrez
 			try {
 				ChessGame game = new ChessGame();
 
-				while (!game.isEnded) {
+				while (!game.isEnded) 
+				{
 					Console.Clear();
 					Frame.printTable(game.table);
 
 					Console.WriteLine("");
 					Console.Write("Escolha uma peça para movimentar: ");
 					Position currentPosition = Frame.readCurrentPosition().toPosition();
+
+					bool[,] possibleMoves = game.table.piece(currentPosition).possibleMoves(); 
+
+					Console.Clear();
+					Frame.printTable(game.table, possibleMoves);
 
 					Console.Write("Escolha para onde quer movimentar: ");
 					Position nextPosition = Frame.readCurrentPosition().toPosition();

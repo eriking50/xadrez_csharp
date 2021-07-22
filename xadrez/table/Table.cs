@@ -40,7 +40,8 @@ namespace table
             p.position = pos;
         }
 
-        public Piece removePiece(Position pos) {
+        public Piece removePiece(Position pos)
+        {
             if (piece(pos) == null) {
                 return null;
             }
@@ -51,14 +52,17 @@ namespace table
             return aux;
         }
 
-        public bool isValidPosition(Position pos) {
-            if (pos.row < 0 || pos.row >= rows || pos.column < 0 || pos.column >= columns) {
+        public bool isValidPosition(Position pos) 
+        {
+            if (pos.row < 0 || pos.row >= rows || pos.column < 0 || pos.column >= columns)
+            {
                 return false;
             }
             return true;
         }
 
-        public void validatePosition(Position pos) {
+        public void validatePosition(Position pos) 
+        {
             if (!isValidPosition(pos))
             {
                 throw new TableException("Posição Inválida");
