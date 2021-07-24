@@ -21,6 +21,25 @@ namespace table
             movesCount++;
         }
 
+        public bool hasPossibleMoves()
+        {
+            bool[,] aux = possibleMoves();
+
+            for (int i = 0; i < tab.rows; i++)
+            {
+                for (int j = 0; j < tab.columns; j++)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool canMoveTo(Position pos) 
+        {
+            return possibleMoves()[pos.row, pos.column];
+        }
+
         public abstract bool[,] possibleMoves();
 
         public abstract bool canMove(Position pos);

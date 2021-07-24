@@ -6,8 +6,8 @@ namespace chess
     class ChessGame
     {
         public Table table {get; private set; }
-        private int turn;
-        private Color activePlayer;
+        public int turn {get; private set; }
+        public Color activePlayer {get; private set; }
         public bool isEnded {get; private set; }
 
         public ChessGame() 
@@ -25,6 +25,49 @@ namespace chess
             p.increaseMovesCount();
             Piece capturedPiece = table.removePiece(nextPosition);
             table.placePiece(p, nextPosition);
+        }
+
+        public void doTurn(Position currentPosition, Position nextPosition)
+        {
+            doMove(currentPosition, nextPosition);
+            turn++;
+            changePlayer();
+        }
+
+        public void validateCurrentPosition(Position pos) 
+        {
+            if (table.piece(pos) == null)
+            {
+                throw new TableException("Não existe nenhuma peça na posição escolhida");
+            }
+            if(activePlayer != table.piece(pos).color)
+            {
+                throw new TableException("Esta peça não é da sua equipe");
+            }
+            if(!table.piece(pos).hasPossibleMoves())
+            {
+                throw new TableException("Não há movimentos possíveis para essa peça");
+            }
+        }
+
+        public void validateNextPosition(Position current, Position next)
+        {
+            if (!table.piece(current).canMoveTo(next))
+            {
+                throw new TableException("Posição escolhida inválida");
+            }
+        }
+
+        public void changePlayer()
+        {
+            if (activePlayer == Color.Red)
+            {
+                activePlayer = Color.Yellow;
+            }
+            else
+            {
+                activePlayer = Color.Red;
+            }
         }
 
         private void placePieces() 
