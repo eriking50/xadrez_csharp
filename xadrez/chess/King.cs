@@ -13,7 +13,8 @@ namespace chess
             return "R";
         }
 
-        public override bool canMove(Position pos) {
+        public override bool canMove(Position pos) 
+        {
             Piece p = tab.piece(pos);
             return p == null || p.color != color;
         }

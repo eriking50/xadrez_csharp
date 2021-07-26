@@ -1,11 +1,66 @@
 ﻿using System;
 using table;
 using chess;
+using System.Collections.Generic;
 
-namespace xadrez
+namespace chess
 {
     class Frame
     {
+        public static void printGame(ChessGame game) 
+        {
+            Frame.printTable(game.table);
+			Console.WriteLine();
+            printCapturedPieces(game);
+			Console.WriteLine();
+			Console.WriteLine($"Turno {game.turn}"); 
+			Console.WriteLine($"Aguardando jogada do jogador: {getPlayerByColor(game.activePlayer)}");
+        }
+
+        public static string getPlayerByColor(Color c) 
+        {
+            switch (c)    
+            {
+                case Color.Blue: 
+                {
+                    return "Azul";
+                }
+                case Color.Red: 
+                {
+                    return "Vermelho";
+                }
+                case Color.Green: 
+                {
+                    return "Verde";
+                }
+                case Color.Yellow: 
+                {
+                    return "Amarelo";
+                }
+                default:
+                    return "Inválido";
+            }
+        }
+
+        public static void printCapturedPieces(ChessGame game)
+        {
+            Console.WriteLine("Peças capturadas: ");
+            Console.Write("Vermelho: ");
+            printCollection(game.capturedByColor(Color.Red));
+            Console.Write("Amarelo: ");
+            printCollection(game.capturedByColor(Color.Yellow));
+        }
+
+        public static void printCollection(HashSet<Piece> col) 
+        {
+            Console.Write("[");
+            foreach (Piece p in col)
+            {
+                Console.Write($"{p} "); 
+            }
+            Console.WriteLine("] ");
+        }
+
         public static void printTable(Table tab)
         {
             Console.ForegroundColor = ConsoleColor.White;

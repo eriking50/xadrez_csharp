@@ -17,10 +17,7 @@ namespace xadrez
 					try 
 					{
 						Console.Clear();
-						Frame.printTable(game.table);
-						Console.WriteLine();
-						Console.WriteLine($"Turno {game.turn}"); 
-						Console.WriteLine($"Aguardando jogada do jogador: {game.activePlayer}");
+						Frame.printGame(game);
 
 						Console.WriteLine("");
 						Console.Write("Escolha uma peça para movimentar: ");
