@@ -46,7 +46,5 @@ namespace table
         }
 
         public abstract bool[,] possibleMoves();
-
-        public abstract bool canMove(Position pos);
     }
 }

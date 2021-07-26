@@ -1,19 +1,19 @@
-﻿using table;
+using table;
 
 namespace chess
 {
-    class Tower : Piece
+    class Bishop : Piece
     {
-        public Tower(Table tab, Color color) : base(tab, color)
+        public Bishop(Table tab, Color color) : base(tab, color)
         {
         }
 
         public override string ToString()
         {
-            return "T";
+            return "B";
         }
 
-        public override bool canMove(Position pos) 
+        public bool canMove(Position pos)
         {
             Piece p = tab.piece(pos);
             return p == null || p.color != color;
@@ -25,8 +25,8 @@ namespace chess
 
             Position pos = new Position(0, 0);
 
-            //up
-            pos.setValues(position.row - 1, position.column); 
+            //up+right
+            pos.setValues(position.row - 1, position.column + 1); 
             {
                 while (tab.isValidPosition(pos) && canMove(pos)) 
                 {
@@ -38,25 +38,11 @@ namespace chess
                     }
 
                     pos.row = pos.row - 1;
-                }
-            }
-            //right
-            pos.setValues(position.row, position.column + 1); 
-            {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
-                {
-                    moveList[pos.row, pos.column] = true;
-
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
-                    {
-                        break;
-                    }
-
                     pos.column = pos.column + 1;
                 }
             }
-            //down
-            pos.setValues(position.row + 1, position.column); 
+            //down+right
+            pos.setValues(position.row + 1, position.column + 1); 
             {
                 while (tab.isValidPosition(pos) && canMove(pos)) 
                 {
@@ -68,10 +54,11 @@ namespace chess
                     }
 
                     pos.row = pos.row + 1;
+                    pos.column = pos.column + 1;
                 }
             }
-            //left
-            pos.setValues(position.row, position.column - 1); 
+            //down+left
+            pos.setValues(position.row + 1, position.column - 1); 
             {
                 while (tab.isValidPosition(pos) && canMove(pos)) 
                 {
@@ -82,6 +69,23 @@ namespace chess
                         break;
                     }
 
+                    pos.row = pos.row + 1;
+                    pos.column = pos.column - 1;
+                }
+            }
+            //up+left
+            pos.setValues(position.row - 1, position.column - 1); 
+            {
+                while (tab.isValidPosition(pos) && canMove(pos)) 
+                {
+                    moveList[pos.row, pos.column] = true;
+
+                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    {
+                        break;
+                    }
+
+                    pos.row = pos.row - 1;
                     pos.column = pos.column - 1;
                 }
             }
@@ -89,5 +93,4 @@ namespace chess
             return moveList;
         }
     }
-    
 }

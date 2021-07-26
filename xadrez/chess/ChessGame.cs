@@ -196,9 +196,9 @@ namespace chess
 
         public bool isKingInCheck(Color c)
         {
-            Piece R = kingPiece(c);
+            Piece K = kingPiece(c);
 
-            if (R == null)
+            if (K == null)
             {
                 throw new TableException($"Não tem rei da cor {getPlayerByColor(c)} no tabuleiro");
             }
@@ -206,7 +206,7 @@ namespace chess
             foreach (Piece p in piecesInGameByColor(enemyPlayer(c)))
             {
                 bool[,] moves = p.possibleMoves();
-                if (moves[R.position.row, R.position.column])
+                if (moves[K.position.row, K.position.column])
                 {
                     return true;
                 }
@@ -256,13 +256,39 @@ namespace chess
 
         private void placePieces() 
         {
-            // placeNewPiece('a', 8, new Tower(table, Color.Yellow));
-            placeNewPiece('b', 8, new Tower(table, Color.Yellow));
-            placeNewPiece('a', 8, new King(table, Color.Yellow));
+            placeNewPiece('a', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('b', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('c', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('d', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('e', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('f', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('g', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('h', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('a', 8, new Rook(table, Color.Yellow));
+            placeNewPiece('h', 8, new Rook(table, Color.Yellow));
+            placeNewPiece('c', 8, new Bishop(table, Color.Yellow));
+            placeNewPiece('f', 8, new Bishop(table, Color.Yellow));
+            placeNewPiece('b', 8, new Knight(table, Color.Yellow));
+            placeNewPiece('g', 8, new Knight(table, Color.Yellow));
+            placeNewPiece('d', 8, new Queen(table, Color.Yellow));
+            placeNewPiece('e', 8, new King(table, Color.Yellow));
 
-            placeNewPiece('h', 7, new Tower(table, Color.Red));
-            placeNewPiece('c', 1, new Tower(table, Color.Red));
-            placeNewPiece('d', 1, new King(table, Color.Red));
+            placeNewPiece('a', 2, new Pawn(table, Color.Red));
+            placeNewPiece('b', 2, new Pawn(table, Color.Red));
+            placeNewPiece('c', 2, new Pawn(table, Color.Red));
+            placeNewPiece('d', 2, new Pawn(table, Color.Red));
+            placeNewPiece('e', 2, new Pawn(table, Color.Red));
+            placeNewPiece('f', 2, new Pawn(table, Color.Red));
+            placeNewPiece('g', 2, new Pawn(table, Color.Red));
+            placeNewPiece('h', 2, new Pawn(table, Color.Red));
+            placeNewPiece('a', 1, new Rook(table, Color.Red));
+            placeNewPiece('h', 1, new Rook(table, Color.Red));
+            placeNewPiece('c', 1, new Bishop(table, Color.Red));
+            placeNewPiece('f', 1, new Bishop(table, Color.Red));
+            placeNewPiece('b', 1, new Knight(table, Color.Red));
+            placeNewPiece('g', 1, new Knight(table, Color.Red));
+            placeNewPiece('d', 1, new Queen(table, Color.Red));
+            placeNewPiece('e', 1, new King(table, Color.Red));
 
         }
     }

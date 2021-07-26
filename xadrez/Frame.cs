@@ -34,19 +34,33 @@ namespace chess
         {
             Console.WriteLine("Peças capturadas: ");
             Console.Write("Vermelho: ");
-            printCollection(game.capturedByColor(Color.Red));
+            printCollection(game.capturedByColor(Color.Red), getConsoleColor(Color.Red));
             Console.Write("Amarelo: ");
-            printCollection(game.capturedByColor(Color.Yellow));
+            printCollection(game.capturedByColor(Color.Yellow), getConsoleColor(Color.Yellow));
         }
 
-        public static void printCollection(HashSet<Piece> col) 
+        public static void printCollection(HashSet<Piece> col, ConsoleColor c) 
         {
-            Console.Write("[");
+            Console.Write("[ ");
             foreach (Piece p in col)
             {
+                Console.ForegroundColor = c;
                 Console.Write($"{p} "); 
+                Console.ForegroundColor = ConsoleColor.White;
             }
             Console.WriteLine("] ");
+        }
+
+        public static ConsoleColor getConsoleColor(Color c)
+        {
+            if (c == Color.Red)
+            {
+                return ConsoleColor.Red;
+            }
+            else
+            {
+                return ConsoleColor.Yellow;
+            }
         }
 
         public static void printTable(Table tab)
