@@ -41,11 +41,13 @@ namespace xadrez
 						Console.WriteLine();
 					}
 				}
-
+				Console.Clear();
+				Frame.printGame(game);
 
 			}
 			catch (TableException e) 
 			{
+				Console.Clear();
 				Console.WriteLine(e.Message);
 			}
 		}

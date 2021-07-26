@@ -13,36 +13,24 @@ namespace chess
 			Console.WriteLine();
             printCapturedPieces(game);
 			Console.WriteLine();
-			Console.WriteLine($"Turno {game.turn}"); 
-			Console.WriteLine($"Aguardando jogada do jogador: {getPlayerByColor(game.activePlayer)}");
-        }
-
-        public static string getPlayerByColor(Color c) 
-        {
-            switch (c)    
+			Console.WriteLine($"Turno {game.turn}");
+            if (!game.isEnded)
+            {                
+                Console.WriteLine($"Aguardando jogada do jogador: {game.getPlayerByColor(game.activePlayer)}");
+                if (game.isCheck)
+                {
+                    Console.WriteLine("VOCÊ ESTÁ EM XEQUE");
+                }
+            }
+            else
             {
-                case Color.Blue: 
-                {
-                    return "Azul";
-                }
-                case Color.Red: 
-                {
-                    return "Vermelho";
-                }
-                case Color.Green: 
-                {
-                    return "Verde";
-                }
-                case Color.Yellow: 
-                {
-                    return "Amarelo";
-                }
-                default:
-                    return "Inválido";
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine($"Vencedor: {game.getPlayerByColor(game.activePlayer)}"); 
             }
         }
 
-        public static void printCapturedPieces(ChessGame game)
+
+        public static void printCapturedPieces(ChessGame game) 
         {
             Console.WriteLine("Peças capturadas: ");
             Console.Write("Vermelho: ");

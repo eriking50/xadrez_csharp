@@ -9,6 +9,7 @@ namespace chess
         public int turn {get; private set; }
         public Color activePlayer {get; private set; }
         public bool isEnded {get; private set; }
+        public bool isCheck {get; private set; }
         private HashSet<Piece> inGamePieces;
         private HashSet<Piece> capturedPieces;
 
@@ -18,12 +19,38 @@ namespace chess
             turn = 1;
             activePlayer = Color.Red;
             isEnded = false;
+            isCheck = false;
             inGamePieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
             placePieces();
         }
 
-        public void doMove(Position currentPosition, Position nextPosition)
+        public string getPlayerByColor(Color c) 
+        {
+            switch (c)    
+            {
+                case Color.Blue: 
+                {
+                    return "Azul";
+                }
+                case Color.Red: 
+                {
+                    return "Vermelho";
+                }
+                case Color.Green: 
+                {
+                    return "Verde";
+                }
+                case Color.Yellow: 
+                {
+                    return "Amarelo";
+                }
+                default:
+                    return "Inválido";
+            }
+        }
+
+        public Piece doMove(Position currentPosition, Position nextPosition)
         {
             Piece p = table.removePiece(currentPosition);
             p.increaseMovesCount();
@@ -33,13 +60,51 @@ namespace chess
             {
                 capturedPieces.Add(capturedPiece);
             }
+            return capturedPiece;
+        }
+
+        public void undoMove(Position currentPosition, Position nextPosition, Piece capturedPiece)
+        {
+            Piece p = table.removePiece(nextPosition);
+            p.decreaseMovesCount();
+            if (capturedPiece != null)
+            {
+                table.placePiece(capturedPiece, nextPosition);
+                capturedPieces.Remove(capturedPiece);
+            }
+
+            table.placePiece(p, currentPosition);
         }
 
         public void doTurn(Position currentPosition, Position nextPosition)
         {
-            doMove(currentPosition, nextPosition);
-            turn++;
-            changePlayer();
+            Piece capturedPiece = doMove(currentPosition, nextPosition);
+            
+            if (isKingInCheck(activePlayer))
+            {
+                undoMove(currentPosition, nextPosition, capturedPiece);
+                throw new TableException("Você não pode se colocar em xeque!");
+            }
+
+            if (isKingInCheck(enemyPlayer(activePlayer)))
+            {
+                isCheck = true;
+            }
+            else
+            {
+                isCheck = false;
+            }
+
+            if (isCheckmate(enemyPlayer(activePlayer)))
+            {
+                isEnded = true;
+            }
+            else
+            {
+                turn++;
+                changePlayer();
+            }
+            
         }
 
         public void validateCurrentPosition(Position pos) 
@@ -105,6 +170,84 @@ namespace chess
             }
         }
 
+        public Color enemyPlayer(Color c)
+        {
+            if (c == Color.Red)
+            {
+                return Color.Yellow;
+            }
+            else
+            {
+                return Color.Red;
+            }
+        }
+
+        private Piece kingPiece(Color c)
+        {
+            foreach (Piece p in piecesInGameByColor(c))
+            { 
+                if (p is King)
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+
+        public bool isKingInCheck(Color c)
+        {
+            Piece R = kingPiece(c);
+
+            if (R == null)
+            {
+                throw new TableException($"Não tem rei da cor {getPlayerByColor(c)} no tabuleiro");
+            }
+
+            foreach (Piece p in piecesInGameByColor(enemyPlayer(c)))
+            {
+                bool[,] moves = p.possibleMoves();
+                if (moves[R.position.row, R.position.column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool isCheckmate(Color c)
+        {
+            if (!isKingInCheck(c))
+            {
+                return false;
+            }
+            else
+            {
+                foreach (Piece p in piecesInGameByColor(c))
+                {
+                    bool[,] moves = p.possibleMoves();
+                    for (int i = 0; i < table.rows; i++)
+                    {
+                        for (int j = 0; j < table.columns; j++)
+                        {
+                            if (moves[i, j])
+                            {
+                                Position currentPosition = p.position;
+                                Position nextPosition = new Position(i, j); 
+                                Piece capturedPiece = doMove(currentPosition, nextPosition);
+                                bool testCheck = isKingInCheck(c);
+                                undoMove(currentPosition, nextPosition, capturedPiece);
+                                if (!testCheck)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
         public void placeNewPiece(char col, int row, Piece p) 
         {
             table.placePiece(p, new ChessPosition(col, row).toPosition());
@@ -113,13 +256,13 @@ namespace chess
 
         private void placePieces() 
         {
-            placeNewPiece('a', 8, new Tower(table, Color.Yellow));
-            placeNewPiece('h', 8, new Tower(table, Color.Yellow));
-            placeNewPiece('d', 8, new King(table, Color.Yellow));
+            // placeNewPiece('a', 8, new Tower(table, Color.Yellow));
+            placeNewPiece('b', 8, new Tower(table, Color.Yellow));
+            placeNewPiece('a', 8, new King(table, Color.Yellow));
 
-            placeNewPiece('a', 1, new Tower(table, Color.Red));
-            placeNewPiece('h', 1, new Tower(table, Color.Red));
-            placeNewPiece('e', 1, new King(table, Color.Red));
+            placeNewPiece('h', 7, new Tower(table, Color.Red));
+            placeNewPiece('c', 1, new Tower(table, Color.Red));
+            placeNewPiece('d', 1, new King(table, Color.Red));
 
         }
     }

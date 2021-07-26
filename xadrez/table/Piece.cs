@@ -21,6 +21,11 @@ namespace table
             movesCount++;
         }
 
+        public void decreaseMovesCount()
+        {
+            movesCount--;
+        }
+
         public bool hasPossibleMoves()
         {
             bool[,] aux = possibleMoves();
