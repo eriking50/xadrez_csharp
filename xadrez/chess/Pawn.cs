@@ -4,8 +4,10 @@ namespace chess
 {
     class Pawn : Piece
     {
-        public Pawn(Table tab, Color color) : base(tab, color)
+        private ChessGame game;
+        public Pawn(Table tab, Color color, ChessGame game) : base(tab, color)
         {
+            this.game = game;
         }
 
         public override string ToString()
@@ -57,6 +59,22 @@ namespace chess
             {
                 moveList[pos.row, pos.column] = true;
             }
+
+            //Special move en passant
+            if (position.row == 3)
+            {
+                Position posL = new Position(position.row, position.column - 1);
+                if (tab.isValidPosition(posL) && hasEnemy(posL) && tab.piece(posL) == game.enPassantPawn)
+                {
+                    moveList[pos.row, pos.column] = true;
+                }
+
+                Position posR = new Position(position.row, position.column + 1);
+                if (tab.isValidPosition(posR) && hasEnemy(posR) && tab.piece(posR) == game.enPassantPawn)
+                {
+                    moveList[pos.row, pos.column] = true;
+                }
+            }
         }
         else
         {
@@ -83,6 +101,22 @@ namespace chess
             if (tab.isValidPosition(pos) && hasEnemy(pos))
             {
                 moveList[pos.row, pos.column] = true;
+            }
+
+            //Special move en passant
+            if (position.row == 4)
+            {
+                Position posL = new Position(position.row, position.column - 1);
+                if (tab.isValidPosition(posL) && hasEnemy(posL) && tab.piece(posL) == game.enPassantPawn)
+                {
+                    moveList[pos.row, pos.column] = true;
+                }
+                
+                Position posR = new Position(position.row, position.column + 1);
+                if (tab.isValidPosition(posR) && hasEnemy(posR) && tab.piece(posR) == game.enPassantPawn)
+                {
+                    moveList[pos.row, pos.column] = true;
+                }
             }
         }
 

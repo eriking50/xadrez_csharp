@@ -10,6 +10,7 @@ namespace chess
         public Color activePlayer {get; private set; }
         public bool isEnded {get; private set; }
         public bool isCheck {get; private set; }
+        public Piece enPassantPawn {get; private set; }
         private HashSet<Piece> inGamePieces;
         private HashSet<Piece> capturedPieces;
 
@@ -20,6 +21,7 @@ namespace chess
             activePlayer = Color.Red;
             isEnded = false;
             isCheck = false;
+            enPassantPawn = null;
             inGamePieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
             placePieces();
@@ -60,7 +62,46 @@ namespace chess
             {
                 capturedPieces.Add(capturedPiece);
             }
-            return capturedPiece;
+            //Special move minor castling
+            if (p is King && nextPosition.column == currentPosition.column + 2)
+            {
+                Position currentPosR = new Position(currentPosition.row, currentPosition.column + 3);
+                Position nextPosR = new Position(currentPosition.row, currentPosition.column + 1);
+                Piece R = table.removePiece(currentPosR);
+                R.increaseMovesCount();
+                table.placePiece(R, nextPosR);
+            }
+            //Special move major castling
+            if (p is King && nextPosition.column == currentPosition.column - 2)
+            {
+                Position currentPosR = new Position(currentPosition.row, currentPosition.column - 4);
+                Position nextPosR = new Position(currentPosition.row, currentPosition.column - 1);
+                Piece R = table.removePiece(currentPosR);
+                R.increaseMovesCount();
+                table.placePiece(R, nextPosR);
+            }
+
+            //Special move en passant
+            if (p is Pawn)
+            {
+                if (currentPosition.column != nextPosition.column && capturedPiece == null)
+                {
+                    Position posP;
+                    if (p.color == Color.Red)
+                    {
+                        posP = new Position(nextPosition.row + 1, nextPosition.column);
+
+                    }
+                    else
+                    {
+                        posP = new Position(nextPosition.row - 1, nextPosition.column);
+                    }
+                    capturedPiece = table.removePiece(posP);
+                    capturedPieces.Add(capturedPiece);
+                }
+            }
+
+        return capturedPiece;
         }
 
         public void undoMove(Position currentPosition, Position nextPosition, Piece capturedPiece)
@@ -72,8 +113,44 @@ namespace chess
                 table.placePiece(capturedPiece, nextPosition);
                 capturedPieces.Remove(capturedPiece);
             }
-
             table.placePiece(p, currentPosition);
+
+            //Special move minor castling
+            if (p is King && nextPosition.column == currentPosition.column + 2)
+            {
+                Position currentPosR = new Position(currentPosition.row, currentPosition.column + 3);
+                Position nextPosR = new Position(currentPosition.row, currentPosition.column + 1);
+                Piece R = table.removePiece(nextPosR);
+                R.decreaseMovesCount();
+                table.placePiece(R, currentPosR);
+            }
+            //Special move major castling
+            if (p is King && nextPosition.column == currentPosition.column - 2)
+            {
+                Position currentPosR = new Position(currentPosition.row, currentPosition.column - 4);
+                Position nextPosR = new Position(currentPosition.row, currentPosition.column - 1);
+                Piece R = table.removePiece(nextPosR);
+                R.decreaseMovesCount();
+                table.placePiece(R, currentPosR);
+            }
+            //Special move en passant
+            if (p is Pawn)
+            {
+                if (currentPosition.column != nextPosition.column && capturedPiece == enPassantPawn)
+                {
+                    Piece pawn = table.removePiece(nextPosition);
+                    Position posP;
+                    if (p.color == Color.Red)
+                    {
+                        posP = new Position(3, nextPosition.column);
+                    }
+                    else
+                    {
+                        posP = new Position(4, nextPosition.column);
+                    }
+                    table.placePiece(pawn, posP);
+                }
+            }
         }
 
         public void doTurn(Position currentPosition, Position nextPosition)
@@ -84,6 +161,23 @@ namespace chess
             {
                 undoMove(currentPosition, nextPosition, capturedPiece);
                 throw new TableException("Você não pode se colocar em xeque!");
+            }
+
+            Piece p = table.piece(nextPosition);
+
+            //Special move Promotion
+
+            if (p is Pawn)
+            {
+                if ((p.color == Color.Red && nextPosition.row == 0) || (p.color == Color.Yellow && nextPosition.row == 7))
+                {
+                    p = table.removePiece(nextPosition);
+                    inGamePieces.Remove(p);
+                    Piece queen = new Queen(table, p.color);
+                    table.placePiece(queen, nextPosition);
+                    inGamePieces.Add(queen);
+                    
+                }
             }
 
             if (isKingInCheck(enemyPlayer(activePlayer)))
@@ -104,7 +198,17 @@ namespace chess
                 turn++;
                 changePlayer();
             }
-            
+
+
+            //Special move En Passant
+            if (p is Pawn && (nextPosition.row == currentPosition.row + 2 || nextPosition.row == currentPosition.row - 2))
+            {
+                enPassantPawn = p;
+            }
+            else
+            {
+                enPassantPawn = null;
+            }
         }
 
         public void validateCurrentPosition(Position pos) 
@@ -256,14 +360,14 @@ namespace chess
 
         private void placePieces() 
         {
-            placeNewPiece('a', 7, new Pawn(table, Color.Yellow));
-            placeNewPiece('b', 7, new Pawn(table, Color.Yellow));
-            placeNewPiece('c', 7, new Pawn(table, Color.Yellow));
-            placeNewPiece('d', 7, new Pawn(table, Color.Yellow));
-            placeNewPiece('e', 7, new Pawn(table, Color.Yellow));
-            placeNewPiece('f', 7, new Pawn(table, Color.Yellow));
-            placeNewPiece('g', 7, new Pawn(table, Color.Yellow));
-            placeNewPiece('h', 7, new Pawn(table, Color.Yellow));
+            placeNewPiece('a', 7, new Pawn(table, Color.Yellow, this));
+            placeNewPiece('b', 7, new Pawn(table, Color.Yellow, this));
+            placeNewPiece('c', 7, new Pawn(table, Color.Yellow, this));
+            placeNewPiece('d', 7, new Pawn(table, Color.Yellow, this));
+            placeNewPiece('e', 7, new Pawn(table, Color.Yellow, this));
+            placeNewPiece('f', 7, new Pawn(table, Color.Yellow, this));
+            placeNewPiece('g', 7, new Pawn(table, Color.Yellow, this));
+            placeNewPiece('h', 7, new Pawn(table, Color.Yellow, this));
             placeNewPiece('a', 8, new Rook(table, Color.Yellow));
             placeNewPiece('h', 8, new Rook(table, Color.Yellow));
             placeNewPiece('c', 8, new Bishop(table, Color.Yellow));
@@ -271,16 +375,16 @@ namespace chess
             placeNewPiece('b', 8, new Knight(table, Color.Yellow));
             placeNewPiece('g', 8, new Knight(table, Color.Yellow));
             placeNewPiece('d', 8, new Queen(table, Color.Yellow));
-            placeNewPiece('e', 8, new King(table, Color.Yellow));
+            placeNewPiece('e', 8, new King(table, Color.Yellow, this));
 
-            placeNewPiece('a', 2, new Pawn(table, Color.Red));
-            placeNewPiece('b', 2, new Pawn(table, Color.Red));
-            placeNewPiece('c', 2, new Pawn(table, Color.Red));
-            placeNewPiece('d', 2, new Pawn(table, Color.Red));
-            placeNewPiece('e', 2, new Pawn(table, Color.Red));
-            placeNewPiece('f', 2, new Pawn(table, Color.Red));
-            placeNewPiece('g', 2, new Pawn(table, Color.Red));
-            placeNewPiece('h', 2, new Pawn(table, Color.Red));
+            placeNewPiece('a', 2, new Pawn(table, Color.Red, this));
+            placeNewPiece('b', 2, new Pawn(table, Color.Red, this));
+            placeNewPiece('c', 2, new Pawn(table, Color.Red, this));
+            placeNewPiece('d', 2, new Pawn(table, Color.Red, this));
+            placeNewPiece('e', 2, new Pawn(table, Color.Red, this));
+            placeNewPiece('f', 2, new Pawn(table, Color.Red, this));
+            placeNewPiece('g', 2, new Pawn(table, Color.Red, this));
+            placeNewPiece('h', 2, new Pawn(table, Color.Red, this));
             placeNewPiece('a', 1, new Rook(table, Color.Red));
             placeNewPiece('h', 1, new Rook(table, Color.Red));
             placeNewPiece('c', 1, new Bishop(table, Color.Red));
@@ -288,7 +392,7 @@ namespace chess
             placeNewPiece('b', 1, new Knight(table, Color.Red));
             placeNewPiece('g', 1, new Knight(table, Color.Red));
             placeNewPiece('d', 1, new Queen(table, Color.Red));
-            placeNewPiece('e', 1, new King(table, Color.Red));
+            placeNewPiece('e', 1, new King(table, Color.Red, this));
 
         }
     }

@@ -96,6 +96,18 @@ namespace chess
                         moveList[position.row, position.column + 2] = true;
                     }
                 }
+                //major castling
+                Position posR2 = new Position(position.row, position.column - 4);
+                if (testCastling(posR2))
+                {
+                    Position p1 = new Position(position.row, position.column - 1);
+                    Position p2 = new Position(position.row, position.column - 2);
+                    Position p3 = new Position(position.row, position.column - 3);
+                    if (tab.piece(p1) == null && tab.piece(p2) == null && tab.piece(p3) == null)
+                    {
+                        moveList[position.row, position.column - 2] = true;
+                    }
+                }
             }
 
             return moveList;
