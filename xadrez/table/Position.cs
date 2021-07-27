@@ -1,25 +1,25 @@
-﻿namespace table
+﻿namespace TableGame
 {
     class Position
     {
-        public int row { get; set; }
-        public int column { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
 
         public Position(int row, int column)
         {
-            this.row = row;
-            this.column = column;
+            this.Row = row;
+            this.Column = column;
         }
 
-        public void setValues(int row, int col) 
+        public void SetValues(int row, int col) 
         {
-            this.row = row;
-            this.column = col;            
+            this.Row = row;
+            this.Column = col;            
         }
 
         public override string ToString()
         {
-            return $"Posição: {row},{column} ";
+            return $"Posição: {Row},{Column} ";
             
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace table
+﻿namespace TableGame
 {
     enum Color
     {

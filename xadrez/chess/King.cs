@@ -1,6 +1,6 @@
-﻿using table;
+﻿using TableGame;
 
-namespace chess
+namespace Chess
 {
     class King : Piece
     {
@@ -15,97 +15,97 @@ namespace chess
             return "R";
         }
 
-        public bool canMove(Position pos) 
+        public bool CanMove(Position pos) 
         {
-            Piece p = tab.piece(pos);
-            return p == null || p.color != color;
+            Piece p = Tab.Piece(pos);
+            return p == null || p.Color != Color;
         }
 
-        public bool testCastling(Position pos)
+        public bool TestCastling(Position pos)
         {
-            Piece p = tab.piece(pos);
-            return p != null && p is Rook && p.color == color && p.movesCount == 0;
+            Piece p = Tab.Piece(pos);
+            return p != null && p is Rook && p.Color == Color && p.MovesCount == 0;
         }
 
-        public override bool[,] possibleMoves()
+        public override bool[,] PossibleMoves()
         {
-            bool[,] moveList = new bool[tab.rows,tab.columns];
+            bool[,] moveList = new bool[Tab.Rows,Tab.Columns];
 
             Position pos = new Position(0, 0);
 
             //up
-            pos.setValues(position.row - 1, position.column);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row - 1, Position.Column);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //up + right
-            pos.setValues(position.row - 1, position.column + 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row - 1, Position.Column + 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //right
-            pos.setValues(position.row, position.column + 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row, Position.Column + 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //down + right
-            pos.setValues(position.row + 1, position.column + 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row + 1, Position.Column + 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }                                              
             //down
-            pos.setValues(position.row + 1, position.column);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row + 1, Position.Column);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }            
             //down + left
-            pos.setValues(position.row + 1, position.column - 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row + 1, Position.Column - 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //left
-            pos.setValues(position.row, position.column - 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row, Position.Column - 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }            
             //up + left
-            pos.setValues(position.row - 1, position.column - 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row - 1, Position.Column - 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
 
             //Special move = Castling
-            if (movesCount == 0 & !game.isCheck)
+            if (MovesCount == 0 & !game.IsCheck)
             {
                 //minor castling
-                Position posR1 = new Position(position.row, position.column + 3);
-                if (testCastling(posR1))
+                Position posR1 = new Position(Position.Row, Position.Column + 3);
+                if (TestCastling(posR1))
                 {
-                    Position p1 = new Position(position.row, position.column + 1);
-                    Position p2 = new Position(position.row, position.column + 2);
-                    if (tab.piece(p1) == null && tab.piece(p2) == null)
+                    Position p1 = new Position(Position.Row, Position.Column + 1);
+                    Position p2 = new Position(Position.Row, Position.Column + 2);
+                    if (Tab.Piece(p1) == null && Tab.Piece(p2) == null)
                     {
-                        moveList[position.row, position.column + 2] = true;
+                        moveList[Position.Row, Position.Column + 2] = true;
                     }
                 }
                 //major castling
-                Position posR2 = new Position(position.row, position.column - 4);
-                if (testCastling(posR2))
+                Position posR2 = new Position(Position.Row, Position.Column - 4);
+                if (TestCastling(posR2))
                 {
-                    Position p1 = new Position(position.row, position.column - 1);
-                    Position p2 = new Position(position.row, position.column - 2);
-                    Position p3 = new Position(position.row, position.column - 3);
-                    if (tab.piece(p1) == null && tab.piece(p2) == null && tab.piece(p3) == null)
+                    Position p1 = new Position(Position.Row, Position.Column - 1);
+                    Position p2 = new Position(Position.Row, Position.Column - 2);
+                    Position p3 = new Position(Position.Row, Position.Column - 3);
+                    if (Tab.Piece(p1) == null && Tab.Piece(p2) == null && Tab.Piece(p3) == null)
                     {
-                        moveList[position.row, position.column - 2] = true;
+                        moveList[Position.Row, Position.Column - 2] = true;
                     }
                 }
             }

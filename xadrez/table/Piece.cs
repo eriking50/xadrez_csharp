@@ -1,50 +1,53 @@
 ﻿
-namespace table
+namespace TableGame
 {
     abstract class Piece
     {
-        public Position position { get; set; }
-        public Table tab { get; protected set; }
-        public Color color { get; protected set;  }
-        public int movesCount { get; protected set; }
+        public Position Position { get; set; }
+        public Table Tab { get; protected set; }
+        public Color Color { get; protected set;  }
+        public int MovesCount { get; protected set; }
 
         public Piece(Table tab, Color color)
         {
-            this.position = null;
-            this.tab = tab;
-            this.color = color;
-            this.movesCount = 0;
+            this.Position = null;
+            this.Tab = tab;
+            this.Color = color;
+            this.MovesCount = 0;
         }
 
-        public void increaseMovesCount() 
+        public void IncreaseMovesCount() 
         {
-            movesCount++;
+            MovesCount++;
         }
 
-        public void decreaseMovesCount()
+        public void DecreaseMovesCount()
         {
-            movesCount--;
+            MovesCount--;
         }
 
-        public bool hasPossibleMoves()
+        public bool HasPossibleMoves()
         {
-            bool[,] aux = possibleMoves();
+            bool[,] moves = PossibleMoves();
 
-            for (int i = 0; i < tab.rows; i++)
+            for (int i = 0; i < Tab.Rows; i++)
             {
-                for (int j = 0; j < tab.columns; j++)
+                for (int j = 0; j < Tab.Columns; j++)
                 {
-                    return true;
+                    if (moves[i,j])
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
         }
 
-        public bool canMoveTo(Position pos) 
+        public bool CanMoveTo(Position pos) 
         {
-            return possibleMoves()[pos.row, pos.column];
+            return PossibleMoves()[pos.Row, pos.Column];
         }
 
-        public abstract bool[,] possibleMoves();
+        public abstract bool[,] PossibleMoves();
     }
 }

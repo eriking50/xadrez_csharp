@@ -1,8 +1,7 @@
 ﻿using System;
-using table;
-using chess;
+using TableGame;
 
-namespace xadrez
+namespace Chess
 {
 	class Program
 	{
@@ -12,29 +11,29 @@ namespace xadrez
 			{
 				ChessGame game = new ChessGame();
 
-				while (!game.isEnded) 
+				while (!game.IsEnded) 
 				{
 					try 
 					{
 						Console.Clear();
-						Frame.printGame(game);
+						Frame.PrintGame(game);
 
 						Console.WriteLine("");
 						Console.Write("Escolha uma peça para movimentar: ");
-						Position currentPosition = Frame.readCurrentPosition().toPosition();
-						game.validateCurrentPosition(currentPosition);
+						Position currentPosition = Frame.ReadCurrentPosition().ToPosition();
+						game.ValidateCurrentPosition(currentPosition);
 
-						bool[,] possibleMoves = game.table.piece(currentPosition).possibleMoves(); 
+						bool[,] possibleMoves = game.Table.Piece(currentPosition).PossibleMoves(); 
 
 						Console.Clear();
-						Frame.printTable(game.table, possibleMoves);
+						Frame.PrintTable(game.Table, possibleMoves);
 
 						Console.WriteLine("");
 						Console.Write("Escolha para onde quer movimentar: ");
-						Position nextPosition = Frame.readCurrentPosition().toPosition();
-						game.validateNextPosition(currentPosition, nextPosition);
+						Position nextPosition = Frame.ReadCurrentPosition().ToPosition();
+						game.ValidateNextPosition(currentPosition, nextPosition);
 
-						game.doTurn(currentPosition, nextPosition);
+						game.DoTurn(currentPosition, nextPosition);
 					}
 					catch (TableException e) {
 						Console.WriteLine(e.Message);
@@ -42,7 +41,7 @@ namespace xadrez
 					}
 				}
 				Console.Clear();
-				Frame.printGame(game);
+				Frame.PrintGame(game);
 
 			}
 			catch (TableException e) 

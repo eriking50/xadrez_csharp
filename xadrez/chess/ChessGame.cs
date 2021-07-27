@@ -1,33 +1,33 @@
 ﻿using System.Collections.Generic;
-using table;
+using TableGame;
 
-namespace chess
+namespace Chess
 {
     class ChessGame
     {
-        public Table table {get; private set; }
-        public int turn {get; private set; }
-        public Color activePlayer {get; private set; }
-        public bool isEnded {get; private set; }
-        public bool isCheck {get; private set; }
-        public Piece enPassantPawn {get; private set; }
+        public Table Table {get; private set; }
+        public int Turn {get; private set; }
+        public Color ActivePlayer {get; private set; }
+        public bool IsEnded {get; private set; }
+        public bool IsCheck {get; private set; }
+        public Piece EnPassantPawn {get; private set; }
         private HashSet<Piece> inGamePieces;
         private HashSet<Piece> capturedPieces;
 
         public ChessGame() 
         {
-            table = new Table(8, 8);
-            turn = 1;
-            activePlayer = Color.Red;
-            isEnded = false;
-            isCheck = false;
-            enPassantPawn = null;
+            Table = new Table(8, 8);
+            Turn = 1;
+            ActivePlayer = Color.Red;
+            IsEnded = false;
+            IsCheck = false;
+            EnPassantPawn = null;
             inGamePieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
-            placePieces();
+            PlacePieces();
         }
 
-        public string getPlayerByColor(Color c) 
+        public string GetPlayerByColor(Color c) 
         {
             switch (c)    
             {
@@ -52,51 +52,51 @@ namespace chess
             }
         }
 
-        public Piece doMove(Position currentPosition, Position nextPosition)
+        public Piece DoMove(Position currentPosition, Position nextPosition)
         {
-            Piece p = table.removePiece(currentPosition);
-            p.increaseMovesCount();
-            Piece capturedPiece = table.removePiece(nextPosition);
-            table.placePiece(p, nextPosition);
+            Piece p = Table.RemovePiece(currentPosition);
+            p.IncreaseMovesCount();
+            Piece capturedPiece = Table.RemovePiece(nextPosition);
+            Table.PlacePiece(p, nextPosition);
             if(capturedPiece != null) 
             {
                 capturedPieces.Add(capturedPiece);
             }
             //Special move minor castling
-            if (p is King && nextPosition.column == currentPosition.column + 2)
+            if (p is King && nextPosition.Column == currentPosition.Column + 2)
             {
-                Position currentPosR = new Position(currentPosition.row, currentPosition.column + 3);
-                Position nextPosR = new Position(currentPosition.row, currentPosition.column + 1);
-                Piece R = table.removePiece(currentPosR);
-                R.increaseMovesCount();
-                table.placePiece(R, nextPosR);
+                Position currentPosR = new Position(currentPosition.Row, currentPosition.Column + 3);
+                Position nextPosR = new Position(currentPosition.Row, currentPosition.Column + 1);
+                Piece R = Table.RemovePiece(currentPosR);
+                R.IncreaseMovesCount();
+                Table.PlacePiece(R, nextPosR);
             }
             //Special move major castling
-            if (p is King && nextPosition.column == currentPosition.column - 2)
+            if (p is King && nextPosition.Column == currentPosition.Column - 2)
             {
-                Position currentPosR = new Position(currentPosition.row, currentPosition.column - 4);
-                Position nextPosR = new Position(currentPosition.row, currentPosition.column - 1);
-                Piece R = table.removePiece(currentPosR);
-                R.increaseMovesCount();
-                table.placePiece(R, nextPosR);
+                Position currentPosR = new Position(currentPosition.Row, currentPosition.Column - 4);
+                Position nextPosR = new Position(currentPosition.Row, currentPosition.Column - 1);
+                Piece R = Table.RemovePiece(currentPosR);
+                R.IncreaseMovesCount();
+                Table.PlacePiece(R, nextPosR);
             }
 
             //Special move en passant
             if (p is Pawn)
             {
-                if (currentPosition.column != nextPosition.column && capturedPiece == null)
+                if (currentPosition.Column != nextPosition.Column && capturedPiece == null)
                 {
                     Position posP;
-                    if (p.color == Color.Red)
+                    if (p.Color == Color.Red)
                     {
-                        posP = new Position(nextPosition.row + 1, nextPosition.column);
+                        posP = new Position(nextPosition.Row + 1, nextPosition.Column);
 
                     }
                     else
                     {
-                        posP = new Position(nextPosition.row - 1, nextPosition.column);
+                        posP = new Position(nextPosition.Row - 1, nextPosition.Column);
                     }
-                    capturedPiece = table.removePiece(posP);
+                    capturedPiece = Table.RemovePiece(posP);
                     capturedPieces.Add(capturedPiece);
                 }
             }
@@ -104,143 +104,143 @@ namespace chess
         return capturedPiece;
         }
 
-        public void undoMove(Position currentPosition, Position nextPosition, Piece capturedPiece)
+        public void UndoMove(Position currentPosition, Position nextPosition, Piece capturedPiece)
         {
-            Piece p = table.removePiece(nextPosition);
-            p.decreaseMovesCount();
+            Piece p = Table.RemovePiece(nextPosition);
+            p.DecreaseMovesCount();
             if (capturedPiece != null)
             {
-                table.placePiece(capturedPiece, nextPosition);
+                Table.PlacePiece(capturedPiece, nextPosition);
                 capturedPieces.Remove(capturedPiece);
             }
-            table.placePiece(p, currentPosition);
+            Table.PlacePiece(p, currentPosition);
 
             //Special move minor castling
-            if (p is King && nextPosition.column == currentPosition.column + 2)
+            if (p is King && nextPosition.Column == currentPosition.Column + 2)
             {
-                Position currentPosR = new Position(currentPosition.row, currentPosition.column + 3);
-                Position nextPosR = new Position(currentPosition.row, currentPosition.column + 1);
-                Piece R = table.removePiece(nextPosR);
-                R.decreaseMovesCount();
-                table.placePiece(R, currentPosR);
+                Position currentPosR = new Position(currentPosition.Row, currentPosition.Column + 3);
+                Position nextPosR = new Position(currentPosition.Row, currentPosition.Column + 1);
+                Piece R = Table.RemovePiece(nextPosR);
+                R.DecreaseMovesCount();
+                Table.PlacePiece(R, currentPosR);
             }
             //Special move major castling
-            if (p is King && nextPosition.column == currentPosition.column - 2)
+            if (p is King && nextPosition.Column == currentPosition.Column - 2)
             {
-                Position currentPosR = new Position(currentPosition.row, currentPosition.column - 4);
-                Position nextPosR = new Position(currentPosition.row, currentPosition.column - 1);
-                Piece R = table.removePiece(nextPosR);
-                R.decreaseMovesCount();
-                table.placePiece(R, currentPosR);
+                Position currentPosR = new Position(currentPosition.Row, currentPosition.Column - 4);
+                Position nextPosR = new Position(currentPosition.Row, currentPosition.Column - 1);
+                Piece R = Table.RemovePiece(nextPosR);
+                R.DecreaseMovesCount();
+                Table.PlacePiece(R, currentPosR);
             }
             //Special move en passant
             if (p is Pawn)
             {
-                if (currentPosition.column != nextPosition.column && capturedPiece == enPassantPawn)
+                if (currentPosition.Column != nextPosition.Column && capturedPiece == EnPassantPawn)
                 {
-                    Piece pawn = table.removePiece(nextPosition);
+                    Piece pawn = Table.RemovePiece(nextPosition);
                     Position posP;
-                    if (p.color == Color.Red)
+                    if (p.Color == Color.Red)
                     {
-                        posP = new Position(3, nextPosition.column);
+                        posP = new Position(3, nextPosition.Column);
                     }
                     else
                     {
-                        posP = new Position(4, nextPosition.column);
+                        posP = new Position(4, nextPosition.Column);
                     }
-                    table.placePiece(pawn, posP);
+                    Table.PlacePiece(pawn, posP);
                 }
             }
         }
 
-        public void doTurn(Position currentPosition, Position nextPosition)
+        public void DoTurn(Position currentPosition, Position nextPosition)
         {
-            Piece capturedPiece = doMove(currentPosition, nextPosition);
+            Piece capturedPiece = DoMove(currentPosition, nextPosition);
             
-            if (isKingInCheck(activePlayer))
+            if (IsKingInCheck(ActivePlayer))
             {
-                undoMove(currentPosition, nextPosition, capturedPiece);
+                UndoMove(currentPosition, nextPosition, capturedPiece);
                 throw new TableException("Você não pode se colocar em xeque!");
             }
 
-            Piece p = table.piece(nextPosition);
+            Piece p = Table.Piece(nextPosition);
 
             //Special move Promotion
 
             if (p is Pawn)
             {
-                if ((p.color == Color.Red && nextPosition.row == 0) || (p.color == Color.Yellow && nextPosition.row == 7))
+                if ((p.Color == Color.Red && nextPosition.Row == 0) || (p.Color == Color.Yellow && nextPosition.Row == 7))
                 {
-                    p = table.removePiece(nextPosition);
+                    p = Table.RemovePiece(nextPosition);
                     inGamePieces.Remove(p);
-                    Piece queen = new Queen(table, p.color);
-                    table.placePiece(queen, nextPosition);
+                    Piece queen = new Queen(Table, p.Color);
+                    Table.PlacePiece(queen, nextPosition);
                     inGamePieces.Add(queen);
                     
                 }
             }
 
-            if (isKingInCheck(enemyPlayer(activePlayer)))
+            if (IsKingInCheck(EnemyPlayer(ActivePlayer)))
             {
-                isCheck = true;
+                IsCheck = true;
             }
             else
             {
-                isCheck = false;
+                IsCheck = false;
             }
 
-            if (isCheckmate(enemyPlayer(activePlayer)))
+            if (IsCheckmate(EnemyPlayer(ActivePlayer)))
             {
-                isEnded = true;
+                IsEnded = true;
             }
             else
             {
-                turn++;
-                changePlayer();
+                Turn++;
+                ChangePlayer();
             }
 
 
             //Special move En Passant
-            if (p is Pawn && (nextPosition.row == currentPosition.row + 2 || nextPosition.row == currentPosition.row - 2))
+            if (p is Pawn && (nextPosition.Row == currentPosition.Row + 2 || nextPosition.Row == currentPosition.Row - 2))
             {
-                enPassantPawn = p;
+                EnPassantPawn = p;
             }
             else
             {
-                enPassantPawn = null;
+                EnPassantPawn = null;
             }
         }
 
-        public void validateCurrentPosition(Position pos) 
+        public void ValidateCurrentPosition(Position pos) 
         {
-            if (table.piece(pos) == null)
+            if (Table.Piece(pos) == null)
             {
                 throw new TableException("Não existe nenhuma peça na posição escolhida");
             }
-            if(activePlayer != table.piece(pos).color)
+            if(ActivePlayer != Table.Piece(pos).Color)
             {
                 throw new TableException("Esta peça não é da sua equipe");
             }
-            if(!table.piece(pos).hasPossibleMoves())
+            if(!Table.Piece(pos).HasPossibleMoves())
             {
                 throw new TableException("Não há movimentos possíveis para essa peça");
             }
         }
 
-        public void validateNextPosition(Position current, Position next)
+        public void ValidateNextPosition(Position current, Position next)
         {
-            if (!table.piece(current).canMoveTo(next))
+            if (!Table.Piece(current).CanMoveTo(next))
             {
                 throw new TableException("Posição escolhida inválida");
             }
         }
 
-        public HashSet<Piece> capturedByColor(Color c)
+        public HashSet<Piece> CapturedByColor(Color c)
         {
             HashSet<Piece> captured = new HashSet<Piece>();
             foreach ( Piece p in capturedPieces)
             {
-                if (p.color == c)
+                if (p.Color == c)
                 {
                     captured.Add(p);
                 }
@@ -248,33 +248,33 @@ namespace chess
             return captured;
         }
 
-        public HashSet<Piece> piecesInGameByColor(Color c) 
+        public HashSet<Piece> PiecesInGameByColor(Color c) 
         {
             HashSet<Piece> inGame = new HashSet<Piece>();
             foreach ( Piece p in inGamePieces)
             {
-                if (p.color == c)
+                if (p.Color == c)
                 {
                     inGame.Add(p);
                 }
             }
-            inGame.ExceptWith(capturedByColor(c));
+            inGame.ExceptWith(CapturedByColor(c));
             return inGame;
         }
 
-        public void changePlayer()
+        public void ChangePlayer()
         {
-            if (activePlayer == Color.Red)
+            if (ActivePlayer == Color.Red)
             {
-                activePlayer = Color.Yellow;
+                ActivePlayer = Color.Yellow;
             }
             else
             {
-                activePlayer = Color.Red;
+                ActivePlayer = Color.Red;
             }
         }
 
-        public Color enemyPlayer(Color c)
+        public Color EnemyPlayer(Color c)
         {
             if (c == Color.Red)
             {
@@ -286,9 +286,9 @@ namespace chess
             }
         }
 
-        private Piece kingPiece(Color c)
+        private Piece KingPiece(Color c)
         {
-            foreach (Piece p in piecesInGameByColor(c))
+            foreach (Piece p in PiecesInGameByColor(c))
             { 
                 if (p is King)
                 {
@@ -298,19 +298,19 @@ namespace chess
             return null;
         }
 
-        public bool isKingInCheck(Color c)
+        public bool IsKingInCheck(Color c)
         {
-            Piece K = kingPiece(c);
+            Piece K = KingPiece(c);
 
             if (K == null)
             {
-                throw new TableException($"Não tem rei da cor {getPlayerByColor(c)} no tabuleiro");
+                throw new TableException($"Não tem rei da cor {GetPlayerByColor(c)} no tabuleiro");
             }
 
-            foreach (Piece p in piecesInGameByColor(enemyPlayer(c)))
+            foreach (Piece p in PiecesInGameByColor(EnemyPlayer(c)))
             {
-                bool[,] moves = p.possibleMoves();
-                if (moves[K.position.row, K.position.column])
+                bool[,] moves = p.PossibleMoves();
+                if (moves[K.Position.Row, K.Position.Column])
                 {
                     return true;
                 }
@@ -318,28 +318,28 @@ namespace chess
             return false;
         }
 
-        public bool isCheckmate(Color c)
+        public bool IsCheckmate(Color c)
         {
-            if (!isKingInCheck(c))
+            if (!IsKingInCheck(c))
             {
                 return false;
             }
             else
             {
-                foreach (Piece p in piecesInGameByColor(c))
+                foreach (Piece p in PiecesInGameByColor(c))
                 {
-                    bool[,] moves = p.possibleMoves();
-                    for (int i = 0; i < table.rows; i++)
+                    bool[,] moves = p.PossibleMoves();
+                    for (int i = 0; i < Table.Rows; i++)
                     {
-                        for (int j = 0; j < table.columns; j++)
+                        for (int j = 0; j < Table.Columns; j++)
                         {
                             if (moves[i, j])
                             {
-                                Position currentPosition = p.position;
+                                Position currentPosition = p.Position;
                                 Position nextPosition = new Position(i, j); 
-                                Piece capturedPiece = doMove(currentPosition, nextPosition);
-                                bool testCheck = isKingInCheck(c);
-                                undoMove(currentPosition, nextPosition, capturedPiece);
+                                Piece capturedPiece = DoMove(currentPosition, nextPosition);
+                                bool testCheck = IsKingInCheck(c);
+                                UndoMove(currentPosition, nextPosition, capturedPiece);
                                 if (!testCheck)
                                 {
                                     return false;
@@ -352,47 +352,47 @@ namespace chess
             }
         }
 
-        public void placeNewPiece(char col, int row, Piece p) 
+        public void PlaceNewPiece(char col, int row, Piece p) 
         {
-            table.placePiece(p, new ChessPosition(col, row).toPosition());
+            Table.PlacePiece(p, new ChessPosition(col, row).ToPosition());
             inGamePieces.Add(p);
         }
 
-        private void placePieces() 
+        private void PlacePieces() 
         {
-            placeNewPiece('a', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('b', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('c', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('d', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('e', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('f', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('g', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('h', 7, new Pawn(table, Color.Yellow, this));
-            placeNewPiece('a', 8, new Rook(table, Color.Yellow));
-            placeNewPiece('h', 8, new Rook(table, Color.Yellow));
-            placeNewPiece('c', 8, new Bishop(table, Color.Yellow));
-            placeNewPiece('f', 8, new Bishop(table, Color.Yellow));
-            placeNewPiece('b', 8, new Knight(table, Color.Yellow));
-            placeNewPiece('g', 8, new Knight(table, Color.Yellow));
-            placeNewPiece('d', 8, new Queen(table, Color.Yellow));
-            placeNewPiece('e', 8, new King(table, Color.Yellow, this));
+            PlaceNewPiece('a', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('b', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('c', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('d', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('e', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('f', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('g', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('h', 7, new Pawn(Table, Color.Yellow, this));
+            PlaceNewPiece('a', 8, new Rook(Table, Color.Yellow));
+            PlaceNewPiece('h', 8, new Rook(Table, Color.Yellow));
+            PlaceNewPiece('c', 8, new Bishop(Table, Color.Yellow));
+            PlaceNewPiece('f', 8, new Bishop(Table, Color.Yellow));
+            PlaceNewPiece('b', 8, new Knight(Table, Color.Yellow));
+            PlaceNewPiece('g', 8, new Knight(Table, Color.Yellow));
+            PlaceNewPiece('d', 8, new Queen(Table, Color.Yellow));
+            PlaceNewPiece('e', 8, new King(Table, Color.Yellow, this));
 
-            placeNewPiece('a', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('b', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('c', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('d', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('e', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('f', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('g', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('h', 2, new Pawn(table, Color.Red, this));
-            placeNewPiece('a', 1, new Rook(table, Color.Red));
-            placeNewPiece('h', 1, new Rook(table, Color.Red));
-            placeNewPiece('c', 1, new Bishop(table, Color.Red));
-            placeNewPiece('f', 1, new Bishop(table, Color.Red));
-            placeNewPiece('b', 1, new Knight(table, Color.Red));
-            placeNewPiece('g', 1, new Knight(table, Color.Red));
-            placeNewPiece('d', 1, new Queen(table, Color.Red));
-            placeNewPiece('e', 1, new King(table, Color.Red, this));
+            PlaceNewPiece('a', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('b', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('c', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('d', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('e', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('f', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('g', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('h', 2, new Pawn(Table, Color.Red, this));
+            PlaceNewPiece('a', 1, new Rook(Table, Color.Red));
+            PlaceNewPiece('h', 1, new Rook(Table, Color.Red));
+            PlaceNewPiece('c', 1, new Bishop(Table, Color.Red));
+            PlaceNewPiece('f', 1, new Bishop(Table, Color.Red));
+            PlaceNewPiece('b', 1, new Knight(Table, Color.Red));
+            PlaceNewPiece('g', 1, new Knight(Table, Color.Red));
+            PlaceNewPiece('d', 1, new Queen(Table, Color.Red));
+            PlaceNewPiece('e', 1, new King(Table, Color.Red, this));
 
         }
     }

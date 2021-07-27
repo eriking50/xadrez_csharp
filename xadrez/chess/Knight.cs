@@ -1,6 +1,6 @@
-using table;
+using TableGame;
 
-namespace chess
+namespace Chess
 {
     class Knight : Piece
     {
@@ -13,65 +13,65 @@ namespace chess
             return "C";
         }
 
-        public bool canMove(Position pos)
+        public bool CanMove(Position pos)
         {
-            Piece p = tab.piece(pos);
-            return p == null || p.color != color;
+            Piece p = Tab.Piece(pos);
+            return p == null || p.Color != Color;
         }
 
-        public override bool[,] possibleMoves()
+        public override bool[,] PossibleMoves()
         {
-            bool[,] moveList = new bool[tab.rows,tab.columns];
+            bool[,] moveList = new bool[Tab.Rows,Tab.Columns];
 
             Position pos = new Position(0, 0);
 
             //up+right
-            pos.setValues(position.row - 2, position.column + 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row - 2, Position.Column + 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //up+left
-            pos.setValues(position.row - 2, position.column - 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row - 2, Position.Column - 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //down+right
-            pos.setValues(position.row + 2, position.column + 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row + 2, Position.Column + 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //down+left
-            pos.setValues(position.row + 2, position.column - 1);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row + 2, Position.Column - 1);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //right+up
-            pos.setValues(position.row - 1, position.column + 2);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row - 1, Position.Column + 2);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //right+down
-            pos.setValues(position.row + 1, position.column + 2);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row + 1, Position.Column + 2);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //left+up
-            pos.setValues(position.row - 1, position.column - 2);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row - 1, Position.Column - 2);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //left+down
-            pos.setValues(position.row + 1, position.column - 2);
-            if (tab.isValidPosition(pos) && canMove(pos))
+            pos.SetValues(Position.Row + 1, Position.Column - 2);
+            if (Tab.IsValidPosition(pos) && CanMove(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
 
 

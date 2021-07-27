@@ -1,69 +1,69 @@
 ﻿
-namespace table
+namespace TableGame
 {
     class Table
     {
-        public int rows { get; set; }
-        public int columns { get; set; }
+        public int Rows { get; set; }
+        public int Columns { get; set; }
         private Piece[,] pieces;
 
         public Table(int rows, int columns)
         {
-            this.rows = rows;
-            this.columns = columns;
+            this.Rows = rows;
+            this.Columns = columns;
             pieces = new Piece[rows, columns];
         }
 
-        public Piece piece(int row, int col)
+        public Piece Piece(int row, int col)
         {
             return pieces[row, col];
         }
 
-        public Piece piece(Position pos) 
+        public Piece Piece(Position pos) 
         {
-            return pieces[pos.row, pos.column];
+            return pieces[pos.Row, pos.Column];
         }
 
-        public bool hasPiece(Position pos) 
+        public bool HasPiece(Position pos) 
         {
-            validatePosition(pos);
-            return piece(pos) != null;
+            ValidatePosition(pos);
+            return Piece(pos) != null;
         }
 
-        public void placePiece(Piece p, Position pos)
+        public void PlacePiece(Piece p, Position pos)
         {
-            if (hasPiece(pos))
+            if (HasPiece(pos))
             {
                 throw new TableException("Já existe uma peça na posição escolhida");
             }
-            pieces[pos.row, pos.column] = p;
-            p.position = pos;
+            pieces[pos.Row, pos.Column] = p;
+            p.Position = pos;
         }
 
-        public Piece removePiece(Position pos)
+        public Piece RemovePiece(Position pos)
         {
-            if (piece(pos) == null) {
+            if (Piece(pos) == null) {
                 return null;
             }
 
-            Piece aux = piece(pos);
-            aux.position = null;
-            pieces[pos.row, pos.column] = null;
+            Piece aux = Piece(pos);
+            aux.Position = null;
+            pieces[pos.Row, pos.Column] = null;
             return aux;
         }
 
-        public bool isValidPosition(Position pos) 
+        public bool IsValidPosition(Position pos) 
         {
-            if (pos.row < 0 || pos.row >= rows || pos.column < 0 || pos.column >= columns)
+            if (pos.Row < 0 || pos.Row >= Rows || pos.Column < 0 || pos.Column >= Columns)
             {
                 return false;
             }
             return true;
         }
 
-        public void validatePosition(Position pos) 
+        public void ValidatePosition(Position pos) 
         {
-            if (!isValidPosition(pos))
+            if (!IsValidPosition(pos))
             {
                 throw new TableException("Posição Inválida");
             }

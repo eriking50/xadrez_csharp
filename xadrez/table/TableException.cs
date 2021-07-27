@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace table
+namespace TableGame
 {
     class TableException : Exception
     {

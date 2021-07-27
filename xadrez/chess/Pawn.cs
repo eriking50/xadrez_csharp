@@ -1,6 +1,6 @@
-using table;
+using TableGame;
 
-namespace chess
+namespace Chess
 {
     class Pawn : Piece
     {
@@ -15,107 +15,107 @@ namespace chess
             return "P";
         }
 
-        private bool hasEnemy(Position pos)
+        private bool HasEnemy(Position pos)
         {
-            Piece p = tab.piece(pos);
-            return p != null && p.color != color;
+            Piece p = Tab.Piece(pos);
+            return p != null && p.Color != Color;
         }
 
-        private bool isFree(Position pos)
+        private bool IsFree(Position pos)
         {
-            return tab.piece(pos) == null;
+            return Tab.Piece(pos) == null;
         }
 
 
-        public override bool[,] possibleMoves()
+        public override bool[,] PossibleMoves()
         {
-            bool[,] moveList = new bool[tab.rows,tab.columns];
+            bool[,] moveList = new bool[Tab.Rows,Tab.Columns];
 
             Position pos = new Position(0, 0);
 
-        if (color == Color.Red)
+        if (Color == Color.Red)
         {
             //normal move
-            pos.setValues(position.row - 1, position.column);
-            if (tab.isValidPosition(pos) && isFree(pos))
+            pos.SetValues(Position.Row - 1, Position.Column);
+            if (Tab.IsValidPosition(pos) && IsFree(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //first move
-            pos.setValues(position.row - 2, position.column);
-            if (tab.isValidPosition(pos) && isFree(pos) && movesCount == 0)
+            pos.SetValues(Position.Row - 2, Position.Column);
+            if (Tab.IsValidPosition(pos) && IsFree(pos) && MovesCount == 0)
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //attack left
-            pos.setValues(position.row - 1, position.column - 1);
-            if (tab.isValidPosition(pos) && hasEnemy(pos))
+            pos.SetValues(Position.Row - 1, Position.Column - 1);
+            if (Tab.IsValidPosition(pos) && HasEnemy(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //attack right
-            pos.setValues(position.row - 1, position.column + 1);
-            if (tab.isValidPosition(pos) && hasEnemy(pos))
+            pos.SetValues(Position.Row - 1, Position.Column + 1);
+            if (Tab.IsValidPosition(pos) && HasEnemy(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
 
             //Special move en passant
-            if (position.row == 3)
+            if (Position.Row == 3)
             {
-                Position posL = new Position(position.row, position.column - 1);
-                if (tab.isValidPosition(posL) && hasEnemy(posL) && tab.piece(posL) == game.enPassantPawn)
+                Position posL = new Position(Position.Row, Position.Column - 1);
+                if (Tab.IsValidPosition(posL) && HasEnemy(posL) && Tab.Piece(posL) == game.EnPassantPawn)
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
                 }
 
-                Position posR = new Position(position.row, position.column + 1);
-                if (tab.isValidPosition(posR) && hasEnemy(posR) && tab.piece(posR) == game.enPassantPawn)
+                Position posR = new Position(Position.Row, Position.Column + 1);
+                if (Tab.IsValidPosition(posR) && HasEnemy(posR) && Tab.Piece(posR) == game.EnPassantPawn)
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
                 }
             }
         }
         else
         {
             //normal move
-            pos.setValues(position.row + 1, position.column);
-            if (tab.isValidPosition(pos) && isFree(pos))
+            pos.SetValues(Position.Row + 1, Position.Column);
+            if (Tab.IsValidPosition(pos) && IsFree(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //first move
-            pos.setValues(position.row + 2, position.column);
-            if (tab.isValidPosition(pos) && isFree(pos) && movesCount == 0)
+            pos.SetValues(Position.Row + 2, Position.Column);
+            if (Tab.IsValidPosition(pos) && IsFree(pos) && MovesCount == 0)
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //attack left
-            pos.setValues(position.row + 1, position.column - 1);
-            if (tab.isValidPosition(pos) && hasEnemy(pos))
+            pos.SetValues(Position.Row + 1, Position.Column - 1);
+            if (Tab.IsValidPosition(pos) && HasEnemy(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
             //attack right
-            pos.setValues(position.row + 1, position.column + 1);
-            if (tab.isValidPosition(pos) && hasEnemy(pos))
+            pos.SetValues(Position.Row + 1, Position.Column + 1);
+            if (Tab.IsValidPosition(pos) && HasEnemy(pos))
             {
-                moveList[pos.row, pos.column] = true;
+                moveList[pos.Row, pos.Column] = true;
             }
 
             //Special move en passant
-            if (position.row == 4)
+            if (Position.Row == 4)
             {
-                Position posL = new Position(position.row, position.column - 1);
-                if (tab.isValidPosition(posL) && hasEnemy(posL) && tab.piece(posL) == game.enPassantPawn)
+                Position posL = new Position(Position.Row, Position.Column - 1);
+                if (Tab.IsValidPosition(posL) && HasEnemy(posL) && Tab.Piece(posL) == game.EnPassantPawn)
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
                 }
                 
-                Position posR = new Position(position.row, position.column + 1);
-                if (tab.isValidPosition(posR) && hasEnemy(posR) && tab.piece(posR) == game.enPassantPawn)
+                Position posR = new Position(Position.Row, Position.Column + 1);
+                if (Tab.IsValidPosition(posR) && HasEnemy(posR) && Tab.Piece(posR) == game.EnPassantPawn)
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
                 }
             }
         }

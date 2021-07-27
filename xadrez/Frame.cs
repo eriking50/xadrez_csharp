@@ -1,23 +1,22 @@
 ﻿using System;
-using table;
-using chess;
+using TableGame;
 using System.Collections.Generic;
 
-namespace chess
+namespace Chess
 {
     class Frame
     {
-        public static void printGame(ChessGame game) 
+        public static void PrintGame(ChessGame game) 
         {
-            Frame.printTable(game.table);
+            Frame.PrintTable(game.Table);
 			Console.WriteLine();
-            printCapturedPieces(game);
+            PrintCapturedPieces(game);
 			Console.WriteLine();
-			Console.WriteLine($"Turno {game.turn}");
-            if (!game.isEnded)
+			Console.WriteLine($"Turno {game.Turn}");
+            if (!game.IsEnded)
             {                
-                Console.WriteLine($"Aguardando jogada do jogador: {game.getPlayerByColor(game.activePlayer)}");
-                if (game.isCheck)
+                Console.WriteLine($"Aguardando jogada do jogador: {game.GetPlayerByColor(game.ActivePlayer)}");
+                if (game.IsCheck)
                 {
                     Console.WriteLine("VOCÊ ESTÁ EM XEQUE");
                 }
@@ -25,21 +24,21 @@ namespace chess
             else
             {
                 Console.WriteLine("XEQUEMATE!");
-                Console.WriteLine($"Vencedor: {game.getPlayerByColor(game.activePlayer)}"); 
+                Console.WriteLine($"Vencedor: {game.GetPlayerByColor(game.ActivePlayer)}"); 
             }
         }
 
 
-        public static void printCapturedPieces(ChessGame game) 
+        public static void PrintCapturedPieces(ChessGame game) 
         {
             Console.WriteLine("Peças capturadas: ");
             Console.Write("Vermelho: ");
-            printCollection(game.capturedByColor(Color.Red), getConsoleColor(Color.Red));
+            PrintCollection(game.CapturedByColor(Color.Red), GetConsoleColor(Color.Red));
             Console.Write("Amarelo: ");
-            printCollection(game.capturedByColor(Color.Yellow), getConsoleColor(Color.Yellow));
+            PrintCollection(game.CapturedByColor(Color.Yellow), GetConsoleColor(Color.Yellow));
         }
 
-        public static void printCollection(HashSet<Piece> col, ConsoleColor c) 
+        public static void PrintCollection(HashSet<Piece> col, ConsoleColor c) 
         {
             Console.Write("[ ");
             foreach (Piece p in col)
@@ -48,10 +47,10 @@ namespace chess
                 Console.Write($"{p} "); 
                 Console.ForegroundColor = ConsoleColor.White;
             }
-            Console.WriteLine("] ");
+            Console.WriteLine("]");
         }
 
-        public static ConsoleColor getConsoleColor(Color c)
+        public static ConsoleColor GetConsoleColor(Color c)
         {
             if (c == Color.Red)
             {
@@ -63,15 +62,15 @@ namespace chess
             }
         }
 
-        public static void printTable(Table tab)
+        public static void PrintTable(Table tab)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            for (int i=0; i < tab.rows; i++)
+            for (int i=0; i < tab.Rows; i++)
             {
                 Console.Write(8 - i + " ");
-                for (int j=0; j < tab.columns; j++)
+                for (int j=0; j < tab.Columns; j++)
                 {
-                        Frame.printPiece(tab.piece(i, j));
+                        Frame.PrintPiece(tab.Piece(i, j));
     
                 }
                 Console.ForegroundColor = ConsoleColor.White;
@@ -80,16 +79,16 @@ namespace chess
             Console.WriteLine("  a b c d e f g h");
         }
 
-        public static void printTable(Table tab, bool[,] moves)
+        public static void PrintTable(Table tab, bool[,] moves)
         {
             Console.ForegroundColor = ConsoleColor.White;
             ConsoleColor baseBackground = ConsoleColor.Black;
             ConsoleColor moveBackground = ConsoleColor.DarkGray;
 
-            for (int i=0; i < tab.rows; i++)
+            for (int i=0; i < tab.Rows; i++)
             {
                 Console.Write(8 - i + " ");
-                for (int j=0; j < tab.columns; j++)
+                for (int j=0; j < tab.Columns; j++)
                 {
                     if (moves[i, j])
                     {
@@ -98,7 +97,7 @@ namespace chess
                     {
                         Console.BackgroundColor = baseBackground;
                     }
-                        Frame.printPiece(tab.piece(i, j));
+                        Frame.PrintPiece(tab.Piece(i, j));
     
                 }
                 Console.ForegroundColor = ConsoleColor.White;
@@ -108,7 +107,7 @@ namespace chess
             Console.WriteLine("  a b c d e f g h");
         }
 
-        public static ChessPosition readCurrentPosition() 
+        public static ChessPosition ReadCurrentPosition() 
         {
             string pos = Console.ReadLine();
             char col = pos[0];
@@ -116,7 +115,7 @@ namespace chess
             return new ChessPosition(col, row);
         }
 
-        public static void printPiece(Piece p) 
+        public static void PrintPiece(Piece p) 
         {
             if (p == null) 
             {
@@ -124,7 +123,7 @@ namespace chess
                 Console.Write("- ");
             } else 
             {
-                switch (p.color)
+                switch (p.Color)
                 {
                     case Color.Blue: 
                     {

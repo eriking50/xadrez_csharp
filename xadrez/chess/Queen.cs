@@ -1,6 +1,6 @@
-using table;
+using TableGame;
 
-namespace chess
+namespace Chess
 {
     class Queen : Piece
     {
@@ -13,140 +13,140 @@ namespace chess
             return "D";
         }
 
-        public bool canMove(Position pos)
+        public bool CanMove(Position pos)
         {
-            Piece p = tab.piece(pos);
-            return p == null || p.color != color;
+            Piece p = Tab.Piece(pos);
+            return p == null || p.Color != Color;
         }
 
-        public override bool[,] possibleMoves()
+        public override bool[,] PossibleMoves()
         {
-            bool[,] moveList = new bool[tab.rows,tab.columns];
+            bool[,] moveList = new bool[Tab.Rows,Tab.Columns];
 
             Position pos = new Position(0, 0);
 
         //up
-            pos.setValues(position.row - 1, position.column); 
+            pos.SetValues(Position.Row - 1, Position.Column); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.row = pos.row - 1;
+                    pos.Row = pos.Row - 1;
                 }
             }
             //right
-            pos.setValues(position.row, position.column + 1); 
+            pos.SetValues(Position.Row, Position.Column + 1); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.column = pos.column + 1;
+                    pos.Column = pos.Column + 1;
                 }
             }
             //down
-            pos.setValues(position.row + 1, position.column); 
+            pos.SetValues(Position.Row + 1, Position.Column); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.row = pos.row + 1;
+                    pos.Row = pos.Row + 1;
                 }
             }
             //left
-            pos.setValues(position.row, position.column - 1); 
+            pos.SetValues(Position.Row, Position.Column - 1); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.column = pos.column - 1;
+                    pos.Column = pos.Column - 1;
                 }
             }
             //up+right
-            pos.setValues(position.row - 1, position.column + 1); 
+            pos.SetValues(Position.Row - 1, Position.Column + 1); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.row = pos.row - 1;
-                    pos.column = pos.column + 1;
+                    pos.Row = pos.Row - 1;
+                    pos.Column = pos.Column + 1;
                 }
             }
             //down+right
-            pos.setValues(position.row + 1, position.column + 1); 
+            pos.SetValues(Position.Row + 1, Position.Column + 1); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.row = pos.row + 1;
-                    pos.column = pos.column + 1;
+                    pos.Row = pos.Row + 1;
+                    pos.Column = pos.Column + 1;
                 }
             }
             //down+left
-            pos.setValues(position.row + 1, position.column - 1); 
+            pos.SetValues(Position.Row + 1, Position.Column - 1); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.row = pos.row + 1;
-                    pos.column = pos.column - 1;
+                    pos.Row = pos.Row + 1;
+                    pos.Column = pos.Column - 1;
                 }
             }
             //up+left
-            pos.setValues(position.row - 1, position.column - 1); 
+            pos.SetValues(Position.Row - 1, Position.Column - 1); 
             {
-                while (tab.isValidPosition(pos) && canMove(pos)) 
+                while (Tab.IsValidPosition(pos) && CanMove(pos)) 
                 {
-                    moveList[pos.row, pos.column] = true;
+                    moveList[pos.Row, pos.Column] = true;
 
-                    if (tab.piece(pos) != null && tab.piece(pos).color != color)
+                    if (Tab.Piece(pos) != null && Tab.Piece(pos).Color != Color)
                     {
                         break;
                     }
 
-                    pos.row = pos.row - 1;
-                    pos.column = pos.column - 1;
+                    pos.Row = pos.Row - 1;
+                    pos.Column = pos.Column - 1;
                 }
             }
 
